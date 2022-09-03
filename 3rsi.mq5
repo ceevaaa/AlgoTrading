@@ -3,7 +3,8 @@
 //|                                      Copyright 2020, CompanyName |
 //|                                       http://www.companyname.net |
 //+------------------------------------------------------------------+
-#property indicator_chart_window
+//#property indicator_chart_window
+#property indicator_separate_window
 #property indicator_buffers 3
 #property indicator_plots   3
 
@@ -11,25 +12,25 @@
 //---- plot RSI-1
 #property indicator_label1  "RSI-1"
 #property indicator_type1   DRAW_LINE
-#property indicator_color1  clrYellow
+#property indicator_color1  clrDarkGreen
 #property indicator_style1  STYLE_SOLID
-#property indicator_width1  1
+#property indicator_width1  2
 
 
 //---- plot RSI-2
 #property indicator_label2  "RSI-2"
 #property indicator_type2   DRAW_LINE
-#property indicator_color2  clrBlue
+#property indicator_color2  clrDarkBlue
 #property indicator_style2  STYLE_SOLID
-#property indicator_width2  1
+#property indicator_width2  2
 
 
 //---- plot RSI-3
 #property indicator_label3  "RSI-3"
 #property indicator_type3   DRAW_LINE
-#property indicator_color3  clrPurple
+#property indicator_color3  clrDarkRed
 #property indicator_style3  STYLE_SOLID
-#property indicator_width3  1
+#property indicator_width3  2
 
 
 //--- limits for displaying of values in the indicator window
@@ -52,9 +53,9 @@ enum Creation
   };
 
 
-input Call_iRSI             type_1=Call_iRSI;               // type of the function
-input Call_iRSI             type_2=Call_iRSI;               // type of the function
-input Call_iRSI             type_2=Call_iRSI;               // type of the function
+input Creation             type_1=Call_iRSI;               // type of the function
+input Creation             type_2=Call_iRSI;               // type of the function
+input Creation             type_3=Call_iRSI;               // type of the function
 
 
 input int                  ma_period_1=21;                 // period of averaging
@@ -100,8 +101,8 @@ int OnInit()
   {
 ///--- assignment of array to indicator buffer
    SetIndexBuffer(0,iRSIBuffer_1,INDICATOR_DATA);
-   SetIndexBuffer(0,iRSIBuffer_2,INDICATOR_DATA);
-   SetIndexBuffer(0,iRSIBuffer_3,INDICATOR_DATA);
+   SetIndexBuffer(1,iRSIBuffer_2,INDICATOR_DATA);
+   SetIndexBuffer(2,iRSIBuffer_3,INDICATOR_DATA);
 
 //--- determine the symbol the indicator is drawn for
    name=symbol;
@@ -183,11 +184,16 @@ int OnInit()
      }
 
 //--- show the symbol/timeframe the Relative Strength Index indicator is calculated for
-   /*
+   
    short_name_1=StringFormat("iRSI(%s/%s, %d, %d)",name,EnumToString(period),
                            ma_period_1,applied_price);
    IndicatorSetString(INDICATOR_SHORTNAME,short_name_1);
-   */
+   short_name_2=StringFormat("iRSI(%s/%s, %d, %d)",name,EnumToString(period),
+                           ma_period_2,applied_price);
+   IndicatorSetString(INDICATOR_SHORTNAME,short_name_2);
+   short_name_3=StringFormat("iRSI(%s/%s, %d, %d)",name,EnumToString(period),
+                           ma_period_3,applied_price);
+   IndicatorSetString(INDICATOR_SHORTNAME,short_name_3);
 //--- normal initialization of the indicator
    return(INIT_SUCCEEDED);
   }
@@ -356,3 +362,4 @@ void OnDeinit(const int reason)
    Comment("");
   }
 //+------------------------------------------------------------------+
+3r
