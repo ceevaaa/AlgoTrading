@@ -12,7 +12,6 @@ input int      MA_Period=8;      // Moving Average Period
 input int      EA_Magic=12345;   // EA Magic Number
 //input double   Adx_Min=22.0;     // Minimum ADX Value
 input double   Lot=0.1;          // Lots to Trade
-input int      MA
 //--- Other parameters
 //int adxHandle; // handle for our ADX indicator
 int rsiHandle;  // handle for our Moving Average indicator
@@ -147,7 +146,7 @@ void OnTick()
       if(PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_BUY)
         {
          Buy_opened = true;  //It is a Buy
-         
+
         }
       else
          if(PositionGetInteger(POSITION_TYPE) == POSITION_TYPE_SELL)
@@ -155,14 +154,15 @@ void OnTick()
             Sell_opened = true; // It is a Sell
            }
      }
-   bool buy_condition_1 = rsiVal[i] > MathMax(avg_18, avg_9);
-   bool sell_condition_1 = rsiVal[i] < MathMin(avg_18, avg_9);
+   bool buy_condition_1 = rsiVal[0] > MathMax(avg_18, avg_9);
+   bool sell_condition_1 = rsiVal[0] < MathMin(avg_18, avg_9);
 
    if(buy_condition_1 && !Buy_opened)
      {
-      if (Sell_opened) {
+      if(Sell_opened)
+        {
          //square the position
-      }
+        }
       mrequest.action = TRADE_ACTION_DEAL;                                 // immediate order execution
       mrequest.price = NormalizeDouble(latest_price.bid,_Digits);          // latest Bid price
       mrequest.sl = NormalizeDouble(latest_price.bid + STP*_Point,_Digits); // Stop Loss
@@ -186,36 +186,32 @@ void OnTick()
          return;
         }
      }
-  }
 
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-if(sell_condition_1)
-  {
-   mrequest.action = TRADE_ACTION_DEAL;                                 // immediate order execution
-   mrequest.price = NormalizeDouble(latest_price.bid,_Digits);          // latest Bid price
-   mrequest.sl = NormalizeDouble(latest_price.bid + STP*_Point,_Digits); // Stop Loss
-   mrequest.tp = NormalizeDouble(latest_price.bid - TKP*_Point,_Digits); // Take Profit
-   mrequest.symbol = _Symbol;                                         // currency pair
-   mrequest.volume = Lot;                                            // number of lots to trade
-   mrequest.magic = EA_Magic;                                        // Order Magic Number
-   mrequest.type= ORDER_TYPE_SELL;                                     // Sell Order
-   mrequest.type_filling = ORDER_FILLING_FOK;                          // Order execution type
-   mrequest.deviation=100;                                           // Deviation from current price
-//--- send order
-   OrderSend(mrequest,mresult);
-   if(mresult.retcode==10009 || mresult.retcode==10008) //Request is completed or order placed
+
+   if(sell_condition_1)
      {
-      Alert("A Sell order has been successfully placed with Ticket#:",mresult.order,"!!");
-     }
-   else
-     {
-      Alert("The Sell order request could not be completed -error:",GetLastError());
-      ResetLastError();
-      return;
+      mrequest.action = TRADE_ACTION_DEAL;                                 // immediate order execution
+      mrequest.price = NormalizeDouble(latest_price.bid,_Digits);          // latest Bid price
+      mrequest.sl = NormalizeDouble(latest_price.bid + STP*_Point,_Digits); // Stop Loss
+      mrequest.tp = NormalizeDouble(latest_price.bid - TKP*_Point,_Digits); // Take Profit
+      mrequest.symbol = _Symbol;                                         // currency pair
+      mrequest.volume = Lot;                                            // number of lots to trade
+      mrequest.magic = EA_Magic;                                        // Order Magic Number
+      mrequest.type= ORDER_TYPE_SELL;                                     // Sell Order
+      mrequest.type_filling = ORDER_FILLING_FOK;                          // Order execution type
+      mrequest.deviation=100;                                           // Deviation from current price
+      //--- send order
+      OrderSend(mrequest,mresult);
+      if(mresult.retcode==10009 || mresult.retcode==10008) //Request is completed or order placed
+        {
+         Alert("A Sell order has been successfully placed with Ticket#:",mresult.order,"!!");
+        }
+      else
+        {
+         Alert("The Sell order request could not be completed -error:",GetLastError());
+         ResetLastError();
+         return;
+        }
      }
   }
-  }
 //+------------------------------------------------------------------+
-
