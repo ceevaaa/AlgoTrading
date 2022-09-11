@@ -1,0 +1,2 @@
+[11-Sep-2022 21:49]
+Orders, Positions, Deals: https://www.mql5.com/en/articles/211
