@@ -161,8 +161,11 @@ void OnTick()
      {
       if(Sell_opened)
         {
-         //square the position
+         // square the position
+         // Call BUY/SELL method with appropriate parameters
         }
+      
+      // Wrap SELL/BUY into a method
       mrequest.action = TRADE_ACTION_DEAL;                                 // immediate order execution
       mrequest.price = NormalizeDouble(latest_price.bid,_Digits);          // latest Bid price
       mrequest.sl = NormalizeDouble(latest_price.bid + STP*_Point,_Digits); // Stop Loss
