@@ -11,3 +11,5 @@ MQL Coding Techniques, Multi-symbol EA: https://www.youtube.com/playlist?list=PL
 Trailing-Stop-On-Profit EA: https://github.com/EarnForex/Trailing-Stop-on-Profit/blob/main/MQL5/Experts/Trailing%20Stop%20on%20Profit.mq5
 
 Heiken Ashi EA: https://github.com/EarnForex/Heiken-Ashi-Naive , docs: https://www.earnforex.com/metatrader-expert-advisors/Heiken-Ashi-Naive/
+
+CTrade beginner tutorial: https://www.mql5.com/en/articles/481
