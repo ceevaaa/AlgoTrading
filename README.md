@@ -2,6 +2,17 @@
 69billion
 
 
+## Tenets
+1. **Thou shall be desciplined.**
+2. Thou shall never skip SL.
+3. Thou shall never over leverage.
+4. Thou shall not be greedy.
+5. Thou shall always trust the EA. 
+6. Thou shall only trade own money.
+7. Thou shall always backtest.
+
+## Links/Notes
+
 MQL5-Baap/God: https://github.com/kenorb 
 
 How to start with MQL5: https://www.mql5.com/en/forum/296230
@@ -46,3 +57,9 @@ CTrade beginner tutorial: https://www.mql5.com/en/articles/481
     requests - placing pending orders under certain conditions</a><br> <a href="https://www.mql5.com/en/articles/7554" target="_blank">Part 33. Pending 
     trading requests - closing positions (full, partial or by an opposite one) under certain conditions</a><br></p>
 </html>
+
+
+
+## Misc
+
+(Doja cat is not a cat)
