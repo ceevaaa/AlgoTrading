@@ -209,12 +209,22 @@ void OnTick()
    bool exit_long  = rsi_buffer_9[0] >= avg_9;
    bool exit_short = rsi_buffer_9[0] <= avg_9;
 
+
    GetPositionStates();
 
    if((HaveLongPosition) && (exit_long))
+     {
       ClosePrevious();
+      return;
+     }
+
+
    if((HaveShortPosition) && (exit_short))
+     {
       ClosePrevious();
+      return;
+     }
+
 
    if(buy_condition)
      {
@@ -222,6 +232,7 @@ void OnTick()
         {
          // logic for buying
          fBuy();
+         return;
         }
      }
 
@@ -231,6 +242,7 @@ void OnTick()
         {
          // logic for selling
          fSell();
+         return;
         }
      }
 
