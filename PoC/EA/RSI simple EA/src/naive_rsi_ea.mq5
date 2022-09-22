@@ -52,6 +52,7 @@ ulong LastBars = 0;
 bool HaveLongPosition;
 bool HaveShortPosition;
 double StopLoss;
+int file_handle;
 
 // indicator handles
 int rsi_handle;
@@ -64,6 +65,19 @@ double rsi_buffer_18[];
 //+------------------------------------------------------------------+
 //| Helper functions                                                 |
 //+------------------------------------------------------------------+
+
+/*
+int SetupCSVLogger(string log_file)
+{
+   int log_file_handle = FileOpen(log_file, FILE_READ|FILE_WRITE|FILE_CSV);
+}
+
+
+void WriteToCsv()
+{
+
+}
+*/
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -116,16 +130,17 @@ void ClosePrevious()
 void fBuy()
   {
    double Ask = SymbolInfoDouble(Symbol(), SYMBOL_ASK);
-   Trade.PositionOpen(_Symbol, ORDER_TYPE_BUY, 1.0, Ask, 0, 0, OrderComment);
+   Trade.PositionOpen(_Symbol, ORDER_TYPE_BUY, Lot, Ask, 0, 0, OrderComment);
   }
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
 void fSell()
   {
-   double Ask = SymbolInfoDouble(Symbol(), SYMBOL_ASK);
-   Trade.PositionOpen(_Symbol, ORDER_TYPE_BUY, 1.0, Ask, 0, 0, OrderComment);
+   double Bid = SymbolInfoDouble(Symbol(), SYMBOL_BID);
+   Trade.PositionOpen(_Symbol, ORDER_TYPE_SELL, Lot, Bid, 0, 0, OrderComment);
   }
+
 
 
 //+------------------------------------------------------------------+
@@ -247,4 +262,5 @@ void OnTick()
      }
 
   }
+//+------------------------------------------------------------------+
 //+------------------------------------------------------------------+
