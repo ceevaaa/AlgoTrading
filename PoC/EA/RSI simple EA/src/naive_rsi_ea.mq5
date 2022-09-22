@@ -35,6 +35,7 @@ input group "Period"
 input int RSI_Period = 9;
 
 
+
 input group "Miscellaneous"
 input int EA_Magic = 12345;
 input string OrderComment= "69Billion-RSI-EA";
@@ -49,8 +50,8 @@ input int Slippage = 100; // Slippage: Tolerated slippage in points.
 CTrade *Trade;
 CPositionInfo PositionInfo;
 ulong LastBars = 0;
-bool HaveLongPosition;
-bool HaveShortPosition;
+bool HaveLongPosition = false;
+bool HaveShortPosition = false;
 double StopLoss;
 int file_handle;
 
@@ -66,6 +67,10 @@ double rsi_buffer_18[];
 //| Helper functions                                                 |
 //+------------------------------------------------------------------+
 
+
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
 
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -113,7 +118,10 @@ void ClosePrevious()
       if((Trade.ResultRetcode() != 10008) && (Trade.ResultRetcode() != 10009) && (Trade.ResultRetcode() != 10010))
          Print("Position Close Return Code: ", Trade.ResultRetcodeDescription());
       else
+        {
          return;
+        }
+
      }
   }
 
@@ -224,17 +232,15 @@ void OnTick()
 
    if((HaveLongPosition) && (exit_long))
      {
+      Print("HaveLong, exit_long");
       ClosePrevious();
-      GetPositionStates();
-      return;
      }
 
 
    if((HaveShortPosition) && (exit_short))
      {
+      Print("HaveShort, exit_short");
       ClosePrevious();
-      GetPositionStates();
-      return;
      }
 
 
@@ -243,9 +249,9 @@ void OnTick()
       if(!HaveLongPosition)
         {
          // logic for buying
+         Print("Buy:try, !HaveLong");
          fBuy();
-         GetPositionStates();
-
+         Print("Buy:done, !HaveLong");
          return;
         }
      }
@@ -255,8 +261,9 @@ void OnTick()
       if(!HaveShortPosition)
         {
          // logic for selling
+         Print("Sell:try, !HaveShort");
          fSell();
-         GetPositionStates();
+         Print("Sell:done, !HaveShort");
          return;
         }
      }
