@@ -8,10 +8,10 @@
 #property version   "1.00"
 
 #property description "EA Based on RSI Indicator"
-#property description "Sell if: rsi_9 > max(MA_9, MA_18)"
-#property description "Buy  if: rsi_9 < min(MA_9, MA_18)"
-#property description "Exit Short if: rsi_9 <= MA_9"
-#property description "Exit Long  if: rsi_9 >= MA_9"
+#property description "Sell if: rsi_9 < min(MA_9, MA_18)"
+#property description "Buy  if: rsi_9 > max(MA_9, MA_18)"
+#property description "Exit Short if: rsi_9 >= MA_9"
+#property description "Exit Long  if: rsi_9 <= MA_9"
 
 //+------------------------------------------------------------------+
 //| Includes                                                         |
@@ -37,7 +37,7 @@ input int RSI_Period = 9;
 
 input group "Miscellaneous"
 input int EA_Magic = 12345;
-input string OrderComment = "69Billion-RSI-EA";
+input string OrderComment= "69Billion-RSI-EA";
 input int Slippage = 100; // Slippage: Tolerated slippage in points.
 
 
@@ -66,41 +66,36 @@ double rsi_buffer_18[];
 //| Helper functions                                                 |
 //+------------------------------------------------------------------+
 
-/*
-int SetupCSVLogger(string log_file)
-{
-   int log_file_handle = FileOpen(log_file, FILE_READ|FILE_WRITE|FILE_CSV);
-}
-
-
-void WriteToCsv()
-{
-
-}
-*/
 
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
 void GetPositionStates()
   {
+
 // Is there a position on this currency pair?
-   if(PositionInfo.Select(_Symbol))
+   PrintFormat("PositionInfoSelect: ", PositionInfo.Select(Symbol()));
+   if(PositionInfo.Select(Symbol()))
      {
+
+      Print("Got Position info");
       if(PositionInfo.PositionType() == POSITION_TYPE_BUY)
         {
+         Print("Buy Position");
          HaveLongPosition = true;
          HaveShortPosition = false;
         }
       else
          if(PositionInfo.PositionType() == POSITION_TYPE_SELL)
            {
+            Print("Sell Position");
             HaveLongPosition = false;
             HaveShortPosition = true;
            }
      }
    else
      {
+      Print("Default Position");
       HaveLongPosition = false;
       HaveShortPosition = false;
      }
@@ -114,7 +109,7 @@ void ClosePrevious()
   {
    for(int i = 0; i < 10; i++)
      {
-      Trade.PositionClose(_Symbol, Slippage);
+      Trade.PositionClose(Symbol(), Slippage);
       if((Trade.ResultRetcode() != 10008) && (Trade.ResultRetcode() != 10009) && (Trade.ResultRetcode() != 10010))
          Print("Position Close Return Code: ", Trade.ResultRetcodeDescription());
       else
@@ -130,7 +125,7 @@ void ClosePrevious()
 void fBuy()
   {
    double Ask = SymbolInfoDouble(Symbol(), SYMBOL_ASK);
-   Trade.PositionOpen(_Symbol, ORDER_TYPE_BUY, Lot, Ask, 0, 0, OrderComment);
+   Trade.PositionOpen(Symbol(), ORDER_TYPE_BUY, Lot, Ask, 0, 0, OrderComment);
   }
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -138,7 +133,7 @@ void fBuy()
 void fSell()
   {
    double Bid = SymbolInfoDouble(Symbol(), SYMBOL_BID);
-   Trade.PositionOpen(_Symbol, ORDER_TYPE_SELL, Lot, Bid, 0, 0, OrderComment);
+   Trade.PositionOpen(Symbol(), ORDER_TYPE_SELL, Lot, Bid, 0, 0, OrderComment);
   }
 
 
@@ -189,10 +184,10 @@ void OnDeinit(const int reason)
 void OnTick()
   {
 //---
-   if((!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) || (!TerminalInfoInteger(TERMINAL_CONNECTED)) || (SymbolInfoInteger(_Symbol, SYMBOL_TRADE_MODE) != SYMBOL_TRADE_MODE_FULL))
+   if((!TerminalInfoInteger(TERMINAL_TRADE_ALLOWED)) || (!TerminalInfoInteger(TERMINAL_CONNECTED)) || (SymbolInfoInteger(Symbol(), SYMBOL_TRADE_MODE) != SYMBOL_TRADE_MODE_FULL))
       return;
 
-   int bars = Bars(_Symbol, _Period);
+   int bars = Bars(Symbol(), _Period);
 
 
    if(bars < 18)
@@ -208,7 +203,7 @@ void OnTick()
       return;
 
 
-   if(CopyBuffer(rsi_handle, 0, 1, 18, rsi_buffer_18) != 18 || CopyBuffer(rsi_handle, 0, 1, 9, rsi_buffer_9) != 9)
+   if(CopyBuffer(rsi_handle, 0, 0, 18, rsi_buffer_18) != 18 || CopyBuffer(rsi_handle, 0, 0, 9, rsi_buffer_9) != 9)
      {
       Alert("Error copying RSI indicator buffer");
       return;
@@ -218,11 +213,11 @@ void OnTick()
    avg_9 = MathMean(rsi_buffer_9);
    avg_18 = MathMean(rsi_buffer_18);
 
-   bool buy_condition = rsi_buffer_9[0] < MathMin(avg_9, avg_18);
-   bool sell_condition = rsi_buffer_9[0] > MathMax(avg_9, avg_18);
+   bool buy_condition = rsi_buffer_9[0] > MathMax(avg_9, avg_18);
+   bool sell_condition = rsi_buffer_9[0] < MathMin(avg_9, avg_18);
 
-   bool exit_long  = rsi_buffer_9[0] >= avg_9;
-   bool exit_short = rsi_buffer_9[0] <= avg_9;
+   bool exit_long  = rsi_buffer_9[0] <= avg_9;
+   bool exit_short = rsi_buffer_9[0] >= avg_9;
 
 
    GetPositionStates();
@@ -230,6 +225,7 @@ void OnTick()
    if((HaveLongPosition) && (exit_long))
      {
       ClosePrevious();
+      GetPositionStates();
       return;
      }
 
@@ -237,6 +233,7 @@ void OnTick()
    if((HaveShortPosition) && (exit_short))
      {
       ClosePrevious();
+      GetPositionStates();
       return;
      }
 
@@ -247,6 +244,8 @@ void OnTick()
         {
          // logic for buying
          fBuy();
+         GetPositionStates();
+
          return;
         }
      }
@@ -257,6 +256,7 @@ void OnTick()
         {
          // logic for selling
          fSell();
+         GetPositionStates();
          return;
         }
      }
