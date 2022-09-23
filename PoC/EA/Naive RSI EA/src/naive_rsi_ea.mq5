@@ -8,10 +8,10 @@
 #property version   "1.00"
 
 #property description "EA Based on RSI Indicator"
-#property description "Sell if: rsi_9 < min(MA_9, MA_18)"
-#property description "Buy  if: rsi_9 > max(MA_9, MA_18)"
-#property description "Exit Short if: rsi_9 >= MA_9"
-#property description "Exit Long  if: rsi_9 <= MA_9"
+#property description "Sell if: rsi_1 < min(MA_1, MA_2)"
+#property description "Buy  if: rsi_1 > max(MA_1, MA_2)"
+#property description "Exit Short if: rsi_1 >= MA_1"
+#property description "Exit Long  if: rsi_1 <= MA_1"
 
 //+------------------------------------------------------------------+
 //| Includes                                                         |
@@ -27,18 +27,23 @@
 
 input group "Money management"
 input double Lot = 0.1;
-//input int StopLoss=30;
-//input int TakeProfit=100;
+input int StopLoss = 40;
+input int TakeProfit = 80;
 
 
 input group "Period"
-input int RSI_Period = 11;
+input int RSI_Period = 9;
+input int MA_Period_1 = 9;
+input int MA_Period_2 = 18;
+
 
 
 
 input group "Miscellaneous"
+input int CopyIndexStart = 0;
 input int EA_Magic = 12345;
-input string OrderComment= "69Billion-RSI-EA";
+input string BuyComment= "Naive-RSI-EA: Buy";
+input string SellComment= "Naive-RSI-EA: Sell";
 input int Slippage = 100; // Slippage: Tolerated slippage in points.
 
 
@@ -52,16 +57,16 @@ CPositionInfo PositionInfo;
 ulong LastBars = 0;
 bool HaveLongPosition = false;
 bool HaveShortPosition = false;
-double StopLoss;
-int file_handle;
+int accuracy = 4;
+int max_period = MathMax(MA_Period_1, MA_Period_2);
 
 // indicator handles
 int rsi_handle;
 
 
 // buffers
-double rsi_buffer_9[];
-double rsi_buffer_18[];
+double rsi_buffer_1[];
+double rsi_buffer_2[];
 
 //+------------------------------------------------------------------+
 //| Helper functions                                                 |
@@ -132,16 +137,20 @@ void ClosePrevious()
 //+------------------------------------------------------------------+
 void fBuy()
   {
-   double Ask = SymbolInfoDouble(Symbol(), SYMBOL_ASK);
-   Trade.PositionOpen(Symbol(), ORDER_TYPE_BUY, Lot, Ask, 0, 0, OrderComment);
+   double Ask = NormalizeDouble(SymbolInfoDouble(Symbol(), SYMBOL_ASK), _Digits);
+   double SL = Ask - StopLoss * _Point ;
+   double TP = Ask + TakeProfit * _Point ;
+   Trade.PositionOpen(Symbol(), ORDER_TYPE_BUY, Lot, Ask, SL, TP, BuyComment);
   }
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
 void fSell()
   {
-   double Bid = SymbolInfoDouble(Symbol(), SYMBOL_BID);
-   Trade.PositionOpen(Symbol(), ORDER_TYPE_SELL, Lot, Bid, 0, 0, OrderComment);
+   double Bid = NormalizeDouble(SymbolInfoDouble(Symbol(), SYMBOL_BID), _Digits);
+   double SL = Bid - StopLoss * _Point ;
+   double TP = Bid + TakeProfit * _Point ;
+   Trade.PositionOpen(Symbol(), ORDER_TYPE_SELL, Lot, Bid, SL, TP, SellComment);
   }
 
 
@@ -198,9 +207,9 @@ void OnTick()
    int bars = Bars(Symbol(), _Period);
 
 
-   if(bars < 18)
+   if(bars < max_period)
      {
-      Alert("We have less than 18 bars, EA will now exit!!");
+      Alert("We have less than required bars, EA will now exit!!");
       return;
      }
 
@@ -211,24 +220,24 @@ void OnTick()
       return;
 
 
-   if(CopyBuffer(rsi_handle, 0, 0, 18, rsi_buffer_18) != 18 || CopyBuffer(rsi_handle, 0, 0, 9, rsi_buffer_9) != 9)
+   if(CopyBuffer(rsi_handle, 0, CopyIndexStart, MA_Period_1, rsi_buffer_1) != MA_Period_1 || CopyBuffer(rsi_handle, 0, CopyIndexStart, MA_Period_2, rsi_buffer_2) != MA_Period_2)
      {
       Alert("Error copying RSI indicator buffer");
       return;
      }
 
-   ArraySetAsSeries(rsi_buffer_18, true);
-   ArraySetAsSeries(rsi_buffer_9, true);
+   ArraySetAsSeries(rsi_buffer_1, true);
+   ArraySetAsSeries(rsi_buffer_2, true);
 
-   double avg_9=0, avg_18=0;
-   avg_9 = MathMean(rsi_buffer_9);
-   avg_18 = MathMean(rsi_buffer_18);
+   double avg_1=0, avg_2=0;
+   avg_1 = MathMean(rsi_buffer_1);
+   avg_2 = MathMean(rsi_buffer_2);
 
-   bool buy_condition = rsi_buffer_9[0] > MathMax(avg_9, avg_18);
-   bool sell_condition = rsi_buffer_9[0] < MathMin(avg_9, avg_18);
+   bool buy_condition = rsi_buffer_1[0] > MathMax(avg_1, avg_2);
+   bool sell_condition = rsi_buffer_1[0] < MathMin(avg_1, avg_2);
 
-   bool exit_long  = rsi_buffer_9[0] < avg_9;
-   bool exit_short = rsi_buffer_9[0] > avg_9;
+   bool exit_long  = rsi_buffer_1[0] < avg_1;
+   bool exit_short = rsi_buffer_1[0] > avg_1;
 
 
    GetPositionStates();
