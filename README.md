@@ -13,8 +13,8 @@
 
 
 ## Index
-POCs: [Index](/PoC/Index.md)<br>
-Strategies: [Index](/strategies/Index.md)
+POCs: [Index](/PoC/README.md)<br>
+Strategies: [Index](/strategies/README.md)
 
 ## Links/Notes
 
