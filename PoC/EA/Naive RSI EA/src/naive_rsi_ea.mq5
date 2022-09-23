@@ -137,9 +137,10 @@ void ClosePrevious()
 //+------------------------------------------------------------------+
 void fBuy()
   {
-   double Ask = NormalizeDouble(SymbolInfoDouble(Symbol(), SYMBOL_ASK), _Digits);
+   double Ask = NormalizeDouble(SymbolInfoDouble(_Symbol, SYMBOL_ASK), _Digits);
    double SL = Ask - StopLoss * _Point ;
    double TP = Ask + TakeProfit * _Point ;
+   PrintFormat("---- STOP LOSS : ", DoubleToString(SL), " --- TAKE PROFIT : ", DoubleToString(TP) , " ----" );
    Trade.PositionOpen(Symbol(), ORDER_TYPE_BUY, Lot, Ask, SL, TP, BuyComment);
   }
 //+------------------------------------------------------------------+
@@ -147,9 +148,10 @@ void fBuy()
 //+------------------------------------------------------------------+
 void fSell()
   {
-   double Bid = NormalizeDouble(SymbolInfoDouble(Symbol(), SYMBOL_BID), _Digits);
+   double Bid = NormalizeDouble(SymbolInfoDouble(_Symbol, SYMBOL_BID), _Digits);
    double SL = Bid - StopLoss * _Point ;
    double TP = Bid + TakeProfit * _Point ;
+   PrintFormat("---- STOP LOSS : ", DoubleToString(SL), " --- TAKE PROFIT : ", DoubleToString(TP) , " ----" );
    Trade.PositionOpen(Symbol(), ORDER_TYPE_SELL, Lot, Bid, SL, TP, SellComment);
   }
 
