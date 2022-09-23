@@ -32,7 +32,7 @@ input double Lot = 0.1;
 
 
 input group "Period"
-input int RSI_Period = 9;
+input int RSI_Period = 11;
 
 
 
@@ -217,6 +217,9 @@ void OnTick()
       return;
      }
 
+   ArraySetAsSeries(rsi_buffer_18, true);
+   ArraySetAsSeries(rsi_buffer_9, true);
+
    double avg_9=0, avg_18=0;
    avg_9 = MathMean(rsi_buffer_9);
    avg_18 = MathMean(rsi_buffer_18);
@@ -224,23 +227,25 @@ void OnTick()
    bool buy_condition = rsi_buffer_9[0] > MathMax(avg_9, avg_18);
    bool sell_condition = rsi_buffer_9[0] < MathMin(avg_9, avg_18);
 
-   bool exit_long  = rsi_buffer_9[0] <= avg_9;
-   bool exit_short = rsi_buffer_9[0] >= avg_9;
+   bool exit_long  = rsi_buffer_9[0] < avg_9;
+   bool exit_short = rsi_buffer_9[0] > avg_9;
 
 
    GetPositionStates();
 
    if((HaveLongPosition) && (exit_long))
      {
-      Print("HaveLong, exit_long");
+      Print("HaveLong:try, exit_long");
       ClosePrevious();
+      Print("HaveLong:done, exit_long");
      }
 
 
    if((HaveShortPosition) && (exit_short))
      {
-      Print("HaveShort, exit_short");
+      Print("HaveShort:try, exit_short");
       ClosePrevious();
+      Print("HaveShort:done, exit_short");
      }
 
 
