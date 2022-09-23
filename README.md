@@ -11,6 +11,11 @@
 6. Thou shall only trade own money.
 7. Thou shall always backtest.
 
+
+## Index
+POCs: [Index](/PoC/Index.md)<br>
+Strategies: [Index](/strategies/Index.md)
+
 ## Links/Notes
 
 MQL5-Baap/God: https://github.com/kenorb 
