@@ -69,4 +69,4 @@ CTrade beginner tutorial: https://www.mql5.com/en/articles/481
 
 ## Misc
 
-(Doja cat is not a cat)
+(Doja cat is not a 🐱)
