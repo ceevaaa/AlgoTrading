@@ -14,7 +14,7 @@
 
 # Indicators
 
-1. Heiken Ashi RSI 
+1. Heiken Ashi RSI  <br>
     [![](https://img.shields.io/badge/state-wip-red)](Indicator%20Advisor/Heiken%20Ashi%20RSI)<br>
     Source: [source directory](Indicators/Heiken%20Ashi%20RSI/src/)<br>
     Docs: [documentation directory](Indicators/Heiken%20Ashi%20RSI/docs/)<br>
