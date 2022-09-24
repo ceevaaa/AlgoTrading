@@ -20,6 +20,8 @@ Strategies: [Index](/strategies/README.md)
 
 **Bot Checks (Before Publishing in the Market): https://www.mql5.com/en/articles/2555**
 
+EVENT Handlers - https://www.mql5.com/en/docs/event_handlers
+
 MQL5-Baap/God: https://github.com/kenorb 
 
 How to start with MQL5: https://www.mql5.com/en/forum/296230
