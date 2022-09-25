@@ -22,6 +22,8 @@ Strategies: [Index](/strategies/README.md)
 
 EVENT Handlers - https://www.mql5.com/en/docs/event_handlers
 
+OPTIMIZATION - https://www.mql5.com/en/articles/1052
+
 MQL5-Baap/God: https://github.com/kenorb 
 
 How to start with MQL5: https://www.mql5.com/en/forum/296230
