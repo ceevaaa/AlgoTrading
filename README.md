@@ -30,6 +30,8 @@ OPTIMIZATION - https://www.mql5.com/en/articles/1052
 
 USE OF #RESOURCE - https://www.mql5.com/en/articles/261
 
+MARGIN JARGON CHEAT SHEET - https://www.babypips.com/learn/forex/margin-cheat-sheet
+
 MQL5-Baap/God: https://github.com/kenorb 
 
 How to start with MQL5: https://www.mql5.com/en/forum/296230
