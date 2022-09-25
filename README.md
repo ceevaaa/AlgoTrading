@@ -24,9 +24,11 @@ Strategies: [Index](/strategies/README.md)
 
 Guides: https://www.earnforex.com/guides
 
-EVENT Handlers - https://www.mql5.com/en/docs/event_handlers
+EVENT HANDLERS - https://www.mql5.com/en/docs/event_handlers
 
 OPTIMIZATION - https://www.mql5.com/en/articles/1052
+
+USE OF #RESOURCE - https://www.mql5.com/en/articles/261
 
 MQL5-Baap/God: https://github.com/kenorb 
 
