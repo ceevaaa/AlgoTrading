@@ -72,7 +72,7 @@ int OnInit()
 //--- sets first bar from what index will be drawn
     PlotIndexSetInteger(0, PLOT_DRAW_BEGIN, ExtPeriodRSI);
 //--- name for DataWindow and indicator subwindow label
-    IndicatorSetString(INDICATOR_SHORTNAME, "RSI(" + string(ExtPeriodRSI) + ")");
+    IndicatorSetString(INDICATOR_SHORTNAME, "Heiken-Ashi-RSI [ " + string(ExtPeriodRSI) + " , " + EnumToString(price_type) + " ]");
 //---
     return(INIT_SUCCEEDED);
    }
@@ -129,7 +129,7 @@ int OnCalculate(const int rates_total,
 
 
 //+------------------------------------------------------------------+
-//|                                                                  |
+//|       On calculate function of RSI                               |
 //+------------------------------------------------------------------+
 void RSICalculate(const int rates_total,
                  const int prev_calculated,
@@ -190,9 +190,10 @@ void RSICalculate(const int rates_total,
 //+------------------------------------------------------------------+
 
 
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
+//+---------------------------------------------------------------------+
+//|             OnCalculate function of Heiken Ashi                     |
+//|ref: https://www.mql5.com/en/code/viewcode/33/129914/heiken_ashi.mq5 |
+//+---------------------------------------------------------------------+
 void HeikenAshiOnCalculate(const int rates_total,
                           const int prev_calculated,
                           const double &open[],
