@@ -22,6 +22,8 @@ Strategies: [Index](/strategies/README.md)
 
 **RISK MANAGEMENT (concepts) https://www.earnforex.com/guides/forex-risk-management/**
 
+Guides: https://www.earnforex.com/guides
+
 EVENT Handlers - https://www.mql5.com/en/docs/event_handlers
 
 OPTIMIZATION - https://www.mql5.com/en/articles/1052
