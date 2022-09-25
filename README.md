@@ -20,6 +20,8 @@ Strategies: [Index](/strategies/README.md)
 
 **Bot Checks (Before Publishing in the Market): https://www.mql5.com/en/articles/2555**
 
+**RISK MANAGEMENT (concepts) https://www.earnforex.com/guides/forex-risk-management/**
+
 EVENT Handlers - https://www.mql5.com/en/docs/event_handlers
 
 OPTIMIZATION - https://www.mql5.com/en/articles/1052
