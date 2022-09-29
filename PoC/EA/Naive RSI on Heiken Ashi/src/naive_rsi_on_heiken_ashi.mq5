@@ -12,7 +12,7 @@
 #property description "Buy  if: rsi_1 > max(MA_1, MA_2)"
 #property description "Exit Short if: rsi_1 >= MA_1"
 #property description "Exit Long  if: rsi_1 <= MA_1"
-
+#resource 
 //+------------------------------------------------------------------+
 //| Includes                                                         |
 //+------------------------------------------------------------------+
@@ -20,6 +20,8 @@
 #include <Trade/Trade.mqh>
 #include <Trade/PositionInfo.mqh>
 #include <Math/Stat/Math.mqh>
+#include <Custom/chart_functions.mqh>
+#include <Custom/ea_helper.mqh>
 
 //+------------------------------------------------------------------+
 //| Inputs                                                           |
@@ -94,7 +96,7 @@ int OnInit()
         //--- the indicator is stopped early
         return(INIT_FAILED);
        }
-    configure_chart(0);
+    configure_chart(CUSTOM_PROFILE_1, 0);
     return(INIT_SUCCEEDED);
    }
 
@@ -199,199 +201,7 @@ void OnTick()
        }
 
    }
-//+------------------------------------------------------------------+
-//+------------------------------------------------------------------+
 
-
-//+------------------------------------------------------------------+
-//| Helper functions                                                 |
-//+------------------------------------------------------------------+
-
-
-//+--------------------------------------------------------------------------------------------------------------------------------+
-//|  source: https://www.mql5.com/en/articles/2555#invalid_SL_TP_for_position                                                      |
-//+--------------------------------------------------------------------------------------------------------------------------------+
-int get_stops_level(string sym)
-   {
-    int stops_level = (int)SymbolInfoInteger(sym, SYMBOL_TRADE_STOPS_LEVEL);
-    return stops_level;
-   }
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-double get_bid(string sym, int digits)
-   {
-    return NormalizeDouble(SymbolInfoDouble(sym, SYMBOL_BID), digits);
-   }
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-double get_ask(string sym, int digits)
-   {
-    return NormalizeDouble(SymbolInfoDouble(sym, SYMBOL_ASK), digits);
-   }
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-double get_stop(string sym, double point)
-   {
-    int stops_level = get_stops_level(sym);
-    return stops_level * point;
-   }
-
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-bool check_tp(double tp, ENUM_ORDER_TYPE type, string sym, double points, int digits)
-   {
-    bool tp_check = false;
-    double ask = get_ask(sym, digits);
-    double bid = get_bid(sym, digits);
-    double stop = get_stop(sym, points);
-
-    switch(type)
-       {
-        case ORDER_TYPE_BUY:
-           {
-            PrintFormat(">> BUY: TP: %.6f, BID: %.6f, STOP: %.6f", tp, bid, stop);
-            tp_check = (tp - bid > stop);
-            break;
-           }
-
-        case ORDER_TYPE_SELL:
-           {
-            PrintFormat(">> SELL: TP: %.6f, BID: %.6f, STOP: %.6f", tp, bid, stop);
-            tp_check = (ask - tp > stop);
-            break;
-           }
-       }
-
-    if(tp_check)
-       {
-        PrintFormat(">> tp_check is true");
-       }
-    else
-       {
-        PrintFormat(">> tp_check is false");
-       }
-    return tp_check;
-   }
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-bool check_sl(double sl, ENUM_ORDER_TYPE type, string sym, double points, int digits)
-   {
-    bool sl_check = false;
-    double ask = get_ask(sym, digits);
-    double bid = get_bid(sym, digits);
-    double stop = get_stop(sym, points);
-
-    switch(type)
-       {
-        case ORDER_TYPE_BUY:
-           {
-            PrintFormat(">> BUY: SL: %.6f, BID: %.6f, STOP: %.6f", sl, bid, stop);
-            sl_check = (bid - sl > stop);
-            break;
-           }
-
-        case ORDER_TYPE_SELL:
-           {
-            PrintFormat(">> SELL: SL: %.6f, BID: %.6f, STOP: %.6f", sl, bid, stop);
-            sl_check = (sl - ask > stop);
-            break;
-           }
-       }
-
-    if(sl_check)
-       {
-        PrintFormat(">> sl_check is true");
-       }
-    else
-       {
-        PrintFormat(">> sl_check is false");
-       }
-    return sl_check;
-   }
-
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-bool check_sl_tp(double sl, double tp, ENUM_ORDER_TYPE type, string sym, double points, int digits)
-   {
-    int stops_level = get_stops_level(sym);
-    bool sl_check = false, tp_check = false;
-
-    sl_check = check_sl(sl, type, sym, points, digits);
-    tp_check = check_tp(tp, type, sym, points, digits);
-
-    return (sl_check && tp_check);
-   }
-
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-double get_allowed_sl(ENUM_ORDER_TYPE type, string sym, double point, int digits)
-   {
-    double stop = get_stop(sym, point);
-    double bid = get_bid(sym, digits);
-    double ask = get_ask(sym, digits);
-    double allowed_sl = 0;
-
-    switch(type)
-       {
-        case ORDER_TYPE_BUY:
-           {
-            allowed_sl = (bid - stop) - point;
-            break;
-           }
-        case ORDER_TYPE_SELL:
-           {
-            allowed_sl = (ask + stop) + point;
-            break;
-           }
-       }
-
-    PrintFormat(">> allowed sl: %.5f", allowed_sl);
-    return allowed_sl;
-   }
-
-
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-double get_allowed_tp(ENUM_ORDER_TYPE type, string sym, double point, int digits)
-   {
-    double stop = get_stop(sym, point);
-    double bid = get_bid(sym, digits);
-    double ask = get_ask(sym, digits);
-    double allowed_tp = 0;
-
-    switch(type)
-       {
-        case ORDER_TYPE_BUY:
-           {
-            allowed_tp = (bid + stop) + point;
-            break;
-           }
-        case ORDER_TYPE_SELL:
-           {
-            allowed_tp = (ask - stop) - point;
-            break;
-           }
-       }
-
-    PrintFormat(">> allowed tp: %.5f", allowed_tp);
-    return allowed_tp;
-   }
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -519,29 +329,5 @@ void fSell()
 
     Trade.PositionOpen(sym, type, Lot, Bid, SL, TP, comment);
 
-   }
-
-//+------------------------------------------------------------------+
-
-
-//+------------------------------------------------------------------+
-//|                                                                  |
-//+------------------------------------------------------------------+
-void configure_chart(long chart_id)
-   {
-    ChartSetInteger(chart_id, CHART_COLOR_BACKGROUND, White);
-    ChartSetInteger(chart_id, CHART_COLOR_FOREGROUND, Black);
-    ChartSetInteger(chart_id, CHART_COLOR_GRID, 241236242);
-    ChartSetInteger(chart_id, CHART_COLOR_CHART_UP, clrSpringGreen);
-    ChartSetInteger(chart_id, CHART_COLOR_CHART_DOWN, clrTomato);
-    ChartSetInteger(chart_id, CHART_COLOR_CANDLE_BULL, clrSpringGreen);
-    ChartSetInteger(chart_id, CHART_COLOR_CANDLE_BEAR, clrTomato);
-    ChartSetInteger(chart_id, CHART_COLOR_CHART_LINE, 86186132);
-    ChartSetInteger(chart_id, CHART_COLOR_VOLUME, 38166154);
-    ChartSetInteger(chart_id, CHART_COLOR_BID, 38166154);
-    ChartSetInteger(chart_id, CHART_COLOR_ASK, 2398380);
-    ChartSetInteger(chart_id, CHART_COLOR_LAST, 156186240);
-    ChartSetInteger(chart_id, CHART_COLOR_STOP_LEVEL, 2398380);
-    ChartRedraw(chart_id);
    }
 //+------------------------------------------------------------------+
