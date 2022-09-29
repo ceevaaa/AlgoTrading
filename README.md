@@ -2,7 +2,7 @@
 69billion
 
 
-## Tenets
+# Tenets
 1. **Thou shall be desciplined.**
 2. Thou shall never skip SL.
 3. Thou shall never over leverage.
@@ -11,12 +11,20 @@
 6. Thou shall only trade own money.
 7. Thou shall always backtest.
 
+<br>
 
-## Index
-POCs: [Index](/PoC/README.md)<br>
-Strategies: [Index](/strategies/README.md)
+# Index
 
-## Links/Notes
+| Name       	| Location                          	|
+|------------	|-----------------------------------	|
+| PoC        	| [ Index ]( /PoC/README.md )       	|
+| Strategies 	| [Index](/strategies/README.md)    	|
+| Libraries  	| [ Index ]( /Libraries/README.md ) 	|
+
+
+<br>
+
+# Links/Notes
 
 **Bot Checks (Before Publishing in the Market): https://www.mql5.com/en/articles/2555**
 
@@ -79,6 +87,6 @@ CTrade beginner tutorial: https://www.mql5.com/en/articles/481
 
 
 
-## Misc
+# Misc
 
 (Doja cat is not a 🐱)
