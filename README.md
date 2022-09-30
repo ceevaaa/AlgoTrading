@@ -26,6 +26,7 @@
 
 # Links/Notes
 
+EA-USING-VOLUMES: https://www.mql5.com/en/articles/11050#system
 
 MQL5-ERRORS : https://www.mql5.com/en/docs/constants/errorswarnings/errorcodes , https://www.mql5.com/en/articles/2041
 
