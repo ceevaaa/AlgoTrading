@@ -26,6 +26,8 @@
 
 # Links/Notes
 
+ACCOUNT-INFO [Margin, Leverage etc] : https://www.mql5.com/en/docs/standardlibrary/tradeclasses/caccountinfo
+
 **Bot Checks (Before Publishing in the Market): https://www.mql5.com/en/articles/2555**
 
 **RISK MANAGEMENT (concepts) https://www.earnforex.com/guides/forex-risk-management/**
