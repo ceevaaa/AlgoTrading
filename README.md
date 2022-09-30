@@ -26,6 +26,9 @@
 
 # Links/Notes
 
+
+MQL5-ERRORS : https://www.mql5.com/en/docs/constants/errorswarnings/errorcodes
+
 ACCOUNT-INFO [Margin, Leverage etc] : https://www.mql5.com/en/docs/standardlibrary/tradeclasses/caccountinfo
 
 **Bot Checks (Before Publishing in the Market): https://www.mql5.com/en/articles/2555**
