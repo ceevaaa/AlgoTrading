@@ -27,7 +27,7 @@
 # Links/Notes
 
 
-MQL5-ERRORS : https://www.mql5.com/en/docs/constants/errorswarnings/errorcodes
+MQL5-ERRORS : https://www.mql5.com/en/docs/constants/errorswarnings/errorcodes , https://www.mql5.com/en/articles/2041
 
 ACCOUNT-INFO [Margin, Leverage etc] : https://www.mql5.com/en/docs/standardlibrary/tradeclasses/caccountinfo
 
