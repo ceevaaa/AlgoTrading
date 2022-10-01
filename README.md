@@ -27,6 +27,8 @@
 
 # Links/Notes
 
+EA Trading engine 4 Vladimir Karputov: article-> https://www.mql5.com/en/articles/9717, code-> https://www.mql5.com/ru/code/37813
+
 EA-USING-VOLUMES: https://www.mql5.com/en/articles/11050#system
 
 MQL5-ERRORS : https://www.mql5.com/en/docs/constants/errorswarnings/errorcodes , https://www.mql5.com/en/articles/2041
