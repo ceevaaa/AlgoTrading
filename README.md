@@ -27,6 +27,8 @@
 
 # Links/Notes
 
+MQL5 Cookbook: https://www.mql5.com/en/articles/638
+
 EA Trading engine 4 Vladimir Karputov: article-> https://www.mql5.com/en/articles/9717, code-> https://www.mql5.com/ru/code/37813
 
 EA-USING-VOLUMES: https://www.mql5.com/en/articles/11050#system
