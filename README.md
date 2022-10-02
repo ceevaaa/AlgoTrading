@@ -27,6 +27,8 @@
 
 # Links/Notes
 
+Error Handling in trade calls: https://www.mql5.com/en/docs/standardlibrary/tradeclasses/ctrade/ctraderesultretcode, https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes (use for positionopen, positionclose etc )
+
 ATR Indicator: https://www.earnforex.com/guides/average-true-range/
 
 MQL5 Cookbook: https://www.mql5.com/en/articles/638
