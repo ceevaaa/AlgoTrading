@@ -27,6 +27,8 @@
 
 # Links/Notes
 
+MQL5 Testing Fundamentals: https://www.mql5.com/en/articles/239
+
 MARGIN/LOT SIZE SORTED - https://www.mql5.com/en/forum/312990
 
 Error Handling in trade calls: https://www.mql5.com/en/docs/standardlibrary/tradeclasses/ctrade/ctraderesultretcode, https://www.mql5.com/en/docs/constants/errorswarnings/enum_trade_return_codes (use for positionopen, positionclose etc )
