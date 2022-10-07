@@ -27,6 +27,8 @@
 
 # Links/Notes
 
+MQL5 Price Action: https://www.mql5.com/en/articles/1771
+
 MQL5 Testing Fundamentals: https://www.mql5.com/en/articles/239
 
 MARGIN/LOT SIZE SORTED - https://www.mql5.com/en/forum/312990
