@@ -66,15 +66,10 @@ bool HaveLongPosition = false;
 bool HaveShortPosition = false;
 int accuracy = 4;
 int print_accuracy = 5;
-int max_period = 3;
+int min_bars = 3;
 
-// indicator handles
-int rsi_handle;
+double point_delta = 10 * _Point;
 
-
-// buffers
-double rsi_buffer_1[];
-double rsi_buffer_2[];
 
 int OrderOpRetry = 5; // Number of position modification attempts.
 
@@ -163,7 +158,7 @@ void OnTick()
    int bars = Bars(Symbol(), _Period);
 
 
-   if(bars < max_period)
+   if(bars < min_bars)
      {
       Print("We have less than required bars, EA will now exit!!");
       return;
@@ -175,7 +170,7 @@ void OnTick()
    else
       return;
       
-   TrailingStop();
+   //TrailingStop();
       
    SetPositionStates();
 
@@ -215,7 +210,7 @@ void OnTick()
    if(bar_color1 == RED)
      {
       
-      if(MathAbs(rates[1].open - rates[2].close) < 10 *_Point)
+      if(MathAbs(rates[1].open - rates[2].close) < point_delta)
         {
          //we have a support
          //updating last support
@@ -232,14 +227,12 @@ void OnTick()
             return;
            }
 
-         if(rates[1].close > resistance0.top + 10 * _Point)
+         if(rates[1].close > resistance0.top + point_delta)
            {
             //we have a resistance break, frens
             Print("Resistance broke");
-            last_break = RESISTANCE;
-
-
-            if(curr_trend == BUY || rates[1].close > resistance1.top + 10 * _Point)
+            
+            if(curr_trend == BUY || last_break == RESISTANCE || rates[1].close > resistance1.top + point_delta)
               {
 
                //close short position; if any
@@ -258,6 +251,9 @@ void OnTick()
                //update current trend
                curr_trend = BUY;
               }
+              
+            //update current trend
+            last_break = RESISTANCE;
            }
         }
      }
@@ -281,13 +277,12 @@ void OnTick()
             return;
            }
 
-         if(support0.bottom > rates[1].close + 10 *_Point)
+         if(support0.bottom > rates[1].close + point_delta)
            {
             //we have a support break, frens
             Print("Support Broke");
-            last_break = SUPPORT;
-
-            if(curr_trend == SELL || support1.bottom >  rates[1].close + 10 * _Point)
+            
+            if(curr_trend == SELL || last_break == SUPPORT || support1.bottom >  rates[1].close + point_delta)
               {
                //close long position; if any
                Print("Sell condition satisfied");
@@ -304,6 +299,10 @@ void OnTick()
                //update current trend
                curr_trend = SELL;
               }
+              
+            //update current trend
+            last_break = SUPPORT;
+
            }
         }
      }
