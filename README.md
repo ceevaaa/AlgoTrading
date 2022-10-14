@@ -27,6 +27,8 @@
 
 # Links/Notes
 
+MQL5 Project Structure: https://www.mql5.com/en/articles/7863
+
 MQL5 Price Action: https://www.mql5.com/en/articles/1771
 
 MQL5 Testing Fundamentals: https://www.mql5.com/en/articles/239
