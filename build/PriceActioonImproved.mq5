@@ -68,6 +68,11 @@ int accuracy = 4;
 int print_accuracy = 5;
 int min_bars = 3;
 
+bool resistanceRealExists = false;
+bool supportRealExists = false;
+bool resistanceFakeExists = false;
+bool supportFakeExists = false;
+
 double point_delta = 10 * _Point;
 
 
@@ -119,7 +124,7 @@ int OnInit()
    Trade.SetDeviationInPoints(Slippage);
 
 
-//configure_chart(CUSTOM_PROFILE_1, 0);
+   configure_chart(CUSTOM_PROFILE_1, 0);
    return(INIT_SUCCEEDED);
   }
 
@@ -162,7 +167,7 @@ void OnTick()
    else
       return;
 
-//TrailingStop();
+   TrailingStop();
 
    SetPositionStates();
 
@@ -209,13 +214,16 @@ void OnTick()
          Print("Support found");
 
          //updating recent support
+         supportFakeExists = true;
          fake_support.top = rates[1].open;
          fake_support.bottom = MathMin(rates[1].low, rates[2].low);
 
-         if(real_support.top != EMPTY_VALUE && fake_support.bottom > real_support.top + point_delta)
+         if(real_support.top == EMPTY_VALUE || fake_support.top + point_delta < real_support.bottom)
            {
 
             //Fake support broke the real support
+            Print("supportRealExists");
+            supportRealExists = true;
             real_support = fake_support;
             real_resistance = fake_resistance;
 
@@ -227,19 +235,22 @@ void OnTick()
 //Green bar -- Red Bar
    if(bar_color1 == GREEN && bar_color0 == RED)
      {
-      if(MathAbs(rates[1].open - rates[2].close) < DBL_EPSILON + 10 * _Point)
+      if(MathAbs(rates[1].open - rates[2].close) < DBL_EPSILON + point_delta)
         {
          //updating last resistance
          Print("Resistance found");
 
          //updating recent fake_rasistance
+         resistanceFakeExists = true;
          fake_resistance.bottom = rates[1].open;
          fake_resistance.top = MathMax(rates[1].high, rates[2].high);
 
-         if(real_resistance.top != EMPTY_VALUE && fake_resistance.bottom > real_resistance.top + point_delta)
+         if(real_resistance.top == EMPTY_VALUE || fake_resistance.bottom > real_resistance.top + point_delta)
            {
 
             //Fake support broke the real support
+            Print("resistanceRealExists");
+            resistanceRealExists = true;
             real_support = fake_support;
             real_resistance = fake_resistance;
 
@@ -251,7 +262,7 @@ void OnTick()
 //Stage 2
    if(bar_color0 == RED)
      {
-      if(rates[1].close + point_delta < real_support.bottom)
+      if(supportRealExists && rates[1].close + point_delta < real_support.bottom)
         {
 
          //close long position; if any
@@ -267,27 +278,41 @@ void OnTick()
          Print("---------------------------------------------------BUY [ DONE ]-----------------------------------------------------------");
 
          //update the resistance
+         if(resistanceFakeExists)
+           {
+            Print("resistanceRealExists");
+           }
+         resistanceRealExists = resistanceFakeExists;
          real_resistance = fake_resistance;
         }
      }
    else
       if(bar_color0 == GREEN)
         {
-         //close short position; if any
-         Print("Buy condition satisfied");
-         if(HaveShortPosition)
+         if(resistanceRealExists && rates[1].close > point_delta + real_resistance.top)
            {
-            Print("---------------------------------------------------EXIT LONG [ START ]----------------------------------------------------------");
-            ClosePrevious();
-            Print("---------------------------------------------------EXIT LONG [ DONE ]-----------------------------------------------------------");
+            //close short position; if any
+            Print("Buy condition satisfied");
+            if(HaveShortPosition)
+              {
+               Print("---------------------------------------------------EXIT LONG [ START ]----------------------------------------------------------");
+               ClosePrevious();
+               Print("---------------------------------------------------EXIT LONG [ DONE ]-----------------------------------------------------------");
+              }
+
+            Print("---------------------------------------------------BUY [ START ]----------------------------------------------------------");
+            fBuy();
+            Print("---------------------------------------------------BUY [ DONE ]-----------------------------------------------------------");
+
+            //update the support
+            if(supportFakeExists)
+              {
+               Print("supportRealExists");
+              }
+            real_support = fake_support;
+            supportRealExists = supportFakeExists;
            }
 
-         Print("---------------------------------------------------BUY [ START ]----------------------------------------------------------");
-         fBuy();
-         Print("---------------------------------------------------BUY [ DONE ]-----------------------------------------------------------");
-
-         //update the support
-         real_support = fake_support;
         }
   }
 
