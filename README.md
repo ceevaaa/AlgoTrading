@@ -3,6 +3,8 @@
 
 > **There is an old joke that the best systematic trading setup consists of a computer, a man and a dog. The computer runs a fully automated strategy, the man feeds the dog, and the dog bites the man if he touches the computer.**
 
+> **Put yourselves in shoes of the Big Hedge Funds and also in the shoes of Retail Traders**
+
 # Tenets
 1. **Thou shall be desciplined.**
 2. Thou shall never skip SL.
