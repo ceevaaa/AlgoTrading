@@ -27,6 +27,8 @@
 
 # Links/Notes
 
+Reference: https://drive.google.com/drive/folders/1ZwVVrJhy697Hwl90r_DFcJGn0wnaIrMJ
+
 Risk Calculation: https://www.mql5.com/en/forum/312990, https://www.mql5.com/en/code/19870
 
 MQL5 Project Structure: https://www.mql5.com/en/articles/7863
